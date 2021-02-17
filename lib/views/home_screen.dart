@@ -15,10 +15,11 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<Category> categories = new List();
   List<Photo> photos = new List();
-
+  int page = 1;
+  bool isLoading = false;
   getTrendingWallpaper() async {
     var respone = await http.get(
-      'https://api.pexels.com/v1/curated?per_page=20',
+      'https://api.pexels.com/v1/curated?page=$page',
       headers: {'Authorization': apiKey},
     );
 
@@ -29,6 +30,7 @@ class _HomeState extends State<Home> {
         photo = Photo.fromJson(element);
         photos.add(photo);
       });
+      isLoading = false;
     });
   }
 
@@ -48,7 +50,7 @@ class _HomeState extends State<Home> {
           text: TextSpan(
             children: [
               TextSpan(
-                text: 'Wallpaper',
+                text: 'Photo',
                 style: TextStyle(
                   color: Colors.black87,
                   fontSize: 20,
@@ -56,7 +58,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
               TextSpan(
-                text: 'Hub',
+                text: 'Box',
                 style: TextStyle(
                   color: Colors.blue,
                   fontSize: 20,
@@ -69,62 +71,74 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         elevation: 0.0,
       ),
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Container(
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 24),
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                  color: Color(0xfff5f8fd),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                            border: InputBorder.none, hintText: 'Search wallpaper...'),
-                      ),
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 24),
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: Color(0xfff5f8fd),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(border: InputBorder.none, hintText: 'Search ...'),
                     ),
-                    Icon(Icons.search),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-              Container(
-                height: 50,
-                child: ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemCount: categories.length,
-                  itemBuilder: (context, index) => CategoryTile(
-                    imgUrl: categories[index].imgUrl,
-                    title: categories[index].categoryName,
                   ),
+                  Icon(Icons.search),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            Container(
+              height: 50,
+              child: ListView.builder(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemCount: categories.length,
+                itemBuilder: (context, index) => CategoryTile(
+                  imgUrl: categories[index].imgUrl,
+                  title: categories[index].categoryName,
                 ),
               ),
-              SizedBox(height: 20),
-              StaggeredGridView.countBuilder(
-                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                shrinkWrap: true,
-                physics: BouncingScrollPhysics(),
-                crossAxisCount: 4,
-                itemCount: photos.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    child: Image.network(photos[index].scr.large),
-                  );
-                },
-                staggeredTileBuilder: (index) => new StaggeredTile.fit(2),
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-              )
-            ],
-          ),
+            ),
+            SizedBox(height: 20),
+            NotificationListener<ScrollNotification>(
+              onNotification: (ScrollNotification scrollInfo) {
+                if (!isLoading && scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
+                  setState(() {
+                    print('dung dk');
+                    page++;
+                    getTrendingWallpaper();
+                    isLoading = true;
+                  });
+                }
+                return isLoading;
+              },
+              child: Expanded(
+                child: StaggeredGridView.countBuilder(
+                  padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                  shrinkWrap: true,
+                  physics: BouncingScrollPhysics(),
+                  crossAxisCount: 4,
+                  itemCount: photos.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      child: Image.network(photos[index].scr.large),
+                    );
+                  },
+                  staggeredTileBuilder: (index) => new StaggeredTile.fit(2),
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
