@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wallpaper_app/views/home_screen.dart';
+import 'package:photo_box/views/home_screen.dart';
 
 void main() {
   runApp(MyApp());

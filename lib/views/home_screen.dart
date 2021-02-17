@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:wallpaper_app/model/category.dart';
-import 'package:wallpaper_app/data/data.dart';
+import 'package:photo_box/model/category.dart';
+import 'package:photo_box/data/data.dart';
 import 'package:http/http.dart' as http;
-import 'package:wallpaper_app/model/photo.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:photo_box/model/photo.dart';
+import 'package:photo_box/widgets/widget.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -96,11 +96,12 @@ class _HomeState extends State<Home> {
             SizedBox(height: 20),
             Container(
               height: 50,
-              child: ListView.builder(
+              child: ListView.separated(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
                 itemCount: categories.length,
+                separatorBuilder: (context, index) => SizedBox(width: 6),
                 itemBuilder: (context, index) => CategoryTile(
                   imgUrl: categories[index].imgUrl,
                   title: categories[index].categoryName,
@@ -112,8 +113,8 @@ class _HomeState extends State<Home> {
               onNotification: (ScrollNotification scrollInfo) {
                 if (!isLoading && scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
                   setState(() {
-                    print('dung dk');
                     page++;
+                    print(page);
                     getTrendingWallpaper();
                     isLoading = true;
                   });
@@ -121,59 +122,11 @@ class _HomeState extends State<Home> {
                 return isLoading;
               },
               child: Expanded(
-                child: StaggeredGridView.countBuilder(
-                  padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                  shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
-                  crossAxisCount: 4,
-                  itemCount: photos.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      child: Image.network(photos[index].scr.large),
-                    );
-                  },
-                  staggeredTileBuilder: (index) => new StaggeredTile.fit(2),
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
-                ),
+                child: staggeredPhotoGrid(photos, context),
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class CategoryTile extends StatelessWidget {
-  final String imgUrl;
-  final String title;
-  CategoryTile({@required this.imgUrl, @required this.title});
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 3),
-      child: Stack(
-        alignment: AlignmentDirectional.center,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(5),
-            child: Image.network(
-              imgUrl,
-              width: 100,
-              height: 50,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Text(
-            title,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
-          ),
-        ],
       ),
     );
   }

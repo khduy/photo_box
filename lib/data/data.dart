@@ -1,4 +1,4 @@
-import 'package:wallpaper_app/model/category.dart';
+import 'package:photo_box/model/category.dart';
 
 String apiKey = '563492ad6f91700001000001fc80e67b4d9b4ec6bb422a7307f2f1a2';
 
