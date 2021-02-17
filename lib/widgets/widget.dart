@@ -41,7 +41,7 @@ class CategoryTile extends StatelessWidget {
 Widget staggeredPhotoGrid(List<Photo> photos, context) {
   return StaggeredGridView.countBuilder(
     padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-    shrinkWrap: true,
+    //shrinkWrap: true,
     physics: BouncingScrollPhysics(),
     crossAxisCount: 4,
     itemCount: photos.length,
@@ -53,5 +53,30 @@ Widget staggeredPhotoGrid(List<Photo> photos, context) {
     staggeredTileBuilder: (index) => new StaggeredTile.fit(2),
     mainAxisSpacing: 8,
     crossAxisSpacing: 8,
+  );
+}
+
+Widget appBarTilte() {
+  return RichText(
+    text: TextSpan(
+      children: [
+        TextSpan(
+          text: 'Photo',
+          style: TextStyle(
+            color: Colors.black87,
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        TextSpan(
+          text: 'Box',
+          style: TextStyle(
+            color: Colors.blue,
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    ),
   );
 }

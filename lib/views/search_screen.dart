@@ -6,21 +6,23 @@ import 'package:photo_box/model/photo.dart';
 import 'package:photo_box/widgets/widget.dart';
 import 'package:http/http.dart' as http;
 
-class CategoryScreen extends StatefulWidget {
-  final String categoryName;
-  CategoryScreen({@required this.categoryName});
+class SearchScreen extends StatefulWidget {
+  final String keyWord;
+  SearchScreen({@required this.keyWord});
 
   @override
-  _CategoryScreenState createState() => _CategoryScreenState();
+  _SearchScreenState createState() => _SearchScreenState();
 }
 
-class _CategoryScreenState extends State<CategoryScreen> {
+class _SearchScreenState extends State<SearchScreen> {
+  TextEditingController _searchController = TextEditingController();
   List<Photo> photos = List();
   int page = 1;
   bool isLoading = false;
-  getPhoto(String title) async {
+  String keyWord;
+  getPhoto(String keyWord) async {
     var respone = await http.get(
-      'https://api.pexels.com/v1/search?query=$title&page=$page',
+      'https://api.pexels.com/v1/search?query=$keyWord&page=$page',
       headers: {'Authorization': apiKey},
     );
 
@@ -36,7 +38,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   void initState() {
-    getPhoto(widget.categoryName);
+    keyWord = widget.keyWord;
+    _searchController.text = keyWord;
+    getPhoto(keyWord);
     super.initState();
   }
 
@@ -52,26 +56,43 @@ class _CategoryScreenState extends State<CategoryScreen> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10, bottom: 5),
-              child: Text(
-                widget.categoryName + ' photos',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff3a3b3c),
-                ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: Color(0xfff5f8fd),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(border: InputBorder.none, hintText: 'Search ...'),
+                    ),
+                  ),
+                  InkWell(
+                    child: Icon(Icons.search),
+                    onTap: () {
+                      if (_searchController.text != "") {
+                        photos.clear();
+                        keyWord = _searchController.text;
+                        getPhoto(keyWord);
+                      }
+                    },
+                  ),
+                ],
               ),
             ),
+            SizedBox(height: 20),
             NotificationListener<ScrollNotification>(
               onNotification: (ScrollNotification scrollInfo) {
                 if (!isLoading && scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
                   setState(() {
                     page++;
                     print(page);
-                    getPhoto(widget.categoryName);
+                    getPhoto(keyWord);
                     isLoading = true;
                   });
                 }
