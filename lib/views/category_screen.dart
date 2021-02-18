@@ -21,7 +21,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   bool isLoading = false;
   getPhoto(String keyWord) async {
     var respone = await http.get(
-      'https://api.pexels.com/v1/search?page=$page&query=$keyWord',
+      'https://api.pexels.com/v1/search?page=$page&per_page=16&query=$keyWord',
       headers: {'Authorization': apiKey},
     );
 

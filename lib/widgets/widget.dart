@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -51,15 +52,25 @@ Widget staggeredPhotoGrid(List<Photo> photos, context) {
       return Container(
         child: GestureDetector(
           child: Hero(
-            tag: photos[index].scr.portrait,
-            child: Image.network(photos[index].scr.large),
-          ),
+              tag: index,
+              child: CachedNetworkImage(
+                placeholder: (context, url) => Center(
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+                imageUrl: photos[index].scr.portrait,
+              )),
           onTap: () {
+            FocusScope.of(context).unfocus();
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => DetailScreen(
                   photo: photos[index],
+                  indexPhoto: index,
                 ),
               ),
             );

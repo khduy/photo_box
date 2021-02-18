@@ -3,7 +3,8 @@ import 'package:photo_box/model/photo.dart';
 
 class DetailScreen extends StatelessWidget {
   final Photo photo;
-  DetailScreen({this.photo});
+  final int indexPhoto;
+  DetailScreen({this.photo, this.indexPhoto});
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -14,10 +15,10 @@ class DetailScreen extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           child: GestureDetector(
             child: Hero(
-              tag: photo.scr.portrait,
+              tag: indexPhoto,
               child: Image.network(
-                photo.scr.large,
-                fit: BoxFit.contain,
+                photo.scr.portrait,
+                fit: BoxFit.cover,
               ),
             ),
             onTap: () => Navigator.pop(context),
