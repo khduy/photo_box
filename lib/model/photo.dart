@@ -1,12 +1,14 @@
 class Photo {
+  int id;
   String photographer;
   String photographerUrl;
   Src scr;
 
-  Photo({this.photographer, this.photographerUrl, this.scr});
+  Photo({this.id, this.photographer, this.photographerUrl, this.scr});
 
   factory Photo.fromJson(Map<String, dynamic> json) {
     return Photo(
+      id: json['id'],
       photographer: json['photographer'],
       photographerUrl: json['photographer_url'],
       scr: Src.fromJson(json['src']),

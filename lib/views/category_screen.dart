@@ -17,10 +17,11 @@ class CategoryScreen extends StatefulWidget {
 class _CategoryScreenState extends State<CategoryScreen> {
   List<Photo> photos = List();
   int page = 1;
+
   bool isLoading = false;
-  getPhoto(String title) async {
+  getPhoto(String keyWord) async {
     var respone = await http.get(
-      'https://api.pexels.com/v1/search?query=$title&page=$page',
+      'https://api.pexels.com/v1/search?page=$page&query=$keyWord',
       headers: {'Authorization': apiKey},
     );
 

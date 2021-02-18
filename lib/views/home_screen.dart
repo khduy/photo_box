@@ -27,13 +27,12 @@ class _HomeState extends State<Home> {
       'https://api.pexels.com/v1/curated?page=$page',
       headers: {'Authorization': apiKey},
     );
-
+    Map<String, dynamic> jsonData = jsonDecode(respone.body);
+    jsonData["photos"].forEach((element) {
+      Photo photo = Photo.fromJson(element);
+      photos.add(photo);
+    });
     setState(() {
-      Map<String, dynamic> jsonData = jsonDecode(respone.body);
-      jsonData["photos"].forEach((element) {
-        Photo photo = Photo.fromJson(element);
-        photos.add(photo);
-      });
       isLoading = false;
     });
   }
@@ -134,11 +133,10 @@ class _HomeState extends State<Home> {
                   setState(() {
                     page++;
                     print(page);
-                    getTrendingPhoto();
                     isLoading = true;
+                    getTrendingPhoto();
                   });
                 }
-                return isLoading;
               },
               child: Expanded(
                 child: staggeredPhotoGrid(photos, context),

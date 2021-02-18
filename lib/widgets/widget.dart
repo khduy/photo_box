@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:photo_box/model/photo.dart';
+import 'package:photo_box/views/detail_screen.dart';
 
 class CategoryTile extends StatelessWidget {
   final String imgUrl;
@@ -47,7 +49,22 @@ Widget staggeredPhotoGrid(List<Photo> photos, context) {
     itemCount: photos.length,
     itemBuilder: (context, index) {
       return Container(
-        child: Image.network(photos[index].scr.large),
+        child: GestureDetector(
+          child: Hero(
+            tag: photos[index].scr.portrait,
+            child: Image.network(photos[index].scr.large),
+          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailScreen(
+                  photo: photos[index],
+                ),
+              ),
+            );
+          },
+        ),
       );
     },
     staggeredTileBuilder: (index) => new StaggeredTile.fit(2),
