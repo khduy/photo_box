@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_box/model/photo.dart';
 
@@ -10,11 +11,12 @@ class DetailScreen extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          color: Colors.transparent,
+          //color: Colors.black,
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: GestureDetector(
             child: Hero(
+              transitionOnUserGestures: true,
               tag: indexPhoto,
               child: Image.network(
                 photo.scr.portrait,

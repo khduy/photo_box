@@ -54,14 +54,14 @@ Widget staggeredPhotoGrid(List<Photo> photos, context) {
           child: Hero(
               tag: index,
               child: CachedNetworkImage(
-                placeholder: (context, url) => Center(
-                  child: Container(
-                    width: 60,
-                    height: 60,
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
-                imageUrl: photos[index].scr.portrait,
+                // placeholder: (context, url) => Center(
+                //   child: Container(
+                //     width: 60,
+                //     height: 60,
+                //     child: CircularProgressIndicator(),
+                //   ),
+                // ),
+                imageUrl: photos[index].scr.medium,
               )),
           onTap: () {
             FocusScope.of(context).unfocus();
