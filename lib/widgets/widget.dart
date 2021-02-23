@@ -52,17 +52,14 @@ Widget staggeredPhotoGrid(List<Photo> photos, context) {
       return Container(
         child: GestureDetector(
           child: Hero(
-              tag: index,
-              child: CachedNetworkImage(
-                // placeholder: (context, url) => Center(
-                //   child: Container(
-                //     width: 60,
-                //     height: 60,
-                //     child: CircularProgressIndicator(),
-                //   ),
-                // ),
-                imageUrl: photos[index].scr.medium,
-              )),
+            tag: index,
+            child: CachedNetworkImage(
+              // placeholder: (context, url) => Container(
+              //   color: Color(0xfff5f8fd),
+              // ),
+              imageUrl: photos[index].scr.medium,
+            ),
+          ),
           onTap: () {
             FocusScope.of(context).unfocus();
             Navigator.push(
