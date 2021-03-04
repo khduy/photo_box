@@ -21,7 +21,7 @@ class _DetailScreenState extends State<DetailScreen> {
     return Scaffold(
       body: Builder(
         builder: (context) => Stack(
-          alignment: AlignmentDirectional.topStart,
+          alignment: AlignmentDirectional.bottomStart,
           children: [
             Container(
               height: MediaQuery.of(context).size.height,
@@ -35,73 +35,122 @@ class _DetailScreenState extends State<DetailScreen> {
                 ),
               ),
             ),
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 3, left: 3),
-                child: Text(
-                  widget.photo.photographer,
-                  style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
-                ),
+            // SafeArea(
+            //   child: Padding(
+            //     padding: const EdgeInsets.only(top: 3, left: 3),
+            //     child: Text(
+            //       widget.photo.photographer,
+            //       style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
+            //     ),
+            //   ),
+            // ),
+            // Container(
+            //   //color: Colors.blue,
+            //   height: MediaQuery.of(context).size.height,
+            //   width: MediaQuery.of(context).size.width,
+            //   alignment: Alignment.bottomCenter,
+            //   child: Column(
+            //     mainAxisSize: MainAxisSize.min,
+            //     children: [
+            //       InkWell(
+            //         child: Container(
+            //           alignment: Alignment.center,
+            //           width: MediaQuery.of(context).size.width / 2,
+            //           height: 50,
+            //           decoration: BoxDecoration(
+            //             borderRadius: BorderRadius.circular(20),
+            //             color: Colors.black26,
+            //             border: Border.all(width: 1, color: Colors.white30),
+            //           ),
+            //           child: Column(
+            //             mainAxisSize: MainAxisSize.min,
+            //             children: [
+            //               Text(
+            //                 'Save photo',
+            //                 style: TextStyle(
+            //                     fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white70),
+            //               ),
+            //               Text(
+            //                 'Photo will be saved to gallery',
+            //                 style: TextStyle(fontSize: 11, color: Colors.white60),
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //         onTap: () {
+            //           //todo: handle permission
+            //           _saveNetworkImage(context);
+            //         },
+            //       ),
+            //       SizedBox(height: 5),
+            //       CupertinoButton(
+            //         child: Text(
+            //           'Cancel',
+            //           style: TextStyle(
+            //               fontSize: 15,
+            //               decoration: TextDecoration.underline,
+            //               color: Colors.white70,
+            //               fontWeight: FontWeight.w500),
+            //         ),
+            //         onPressed: () {
+            //           Navigator.pop(context);
+            //         },
+            //       ),
+            //       SizedBox(
+            //         height: 50,
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            Container(
+              height: 50,
+              //color: Colors.black26,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [
+                      Colors.black38,
+                      Colors.transparent,
+                    ]),
               ),
             ),
-            Container(
-              //color: Colors.blue,
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              alignment: Alignment.bottomCenter,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
+            SafeArea(
+              bottom: false,
+              minimum: EdgeInsets.all(5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  InkWell(
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width / 2,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.black26,
-                        border: Border.all(width: 1, color: Colors.white30),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Save photo',
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white70),
-                          ),
-                          Text(
-                            'Photo will be saved to gallery',
-                            style: TextStyle(fontSize: 11, color: Colors.white60),
-                          ),
-                        ],
-                      ),
-                    ),
-                    onTap: () {
-                      //todo: handle permission
-                      _saveNetworkImage(context);
-                    },
-                  ),
-                  SizedBox(height: 5),
-                  CupertinoButton(
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
                     child: Text(
-                      'Cancel',
-                      style: TextStyle(
-                          fontSize: 15,
-                          decoration: TextDecoration.underline,
-                          color: Colors.white70,
-                          fontWeight: FontWeight.w500),
+                      widget.photo.photographer,
+                      style:
+                          TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
                     ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
                   ),
-                  SizedBox(
-                    height: 50,
+                  Spacer(),
+                  CupertinoButton(
+                    padding: EdgeInsets.only(),
+                    child: Icon(
+                      Icons.download_sharp,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                    onPressed: () => _saveNetworkImage(context),
+                  ),
+                  CupertinoButton(
+                    padding: EdgeInsets.only(),
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                    onPressed: () => Navigator.pop(context),
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -131,7 +180,10 @@ class _DetailScreenState extends State<DetailScreen> {
       barrierDismissible: false,
     );
     await GallerySaver.saveImage(widget.photo.scr.original).then((bool success) {
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Saved')));
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('Saved'),
+        duration: Duration(seconds: 1),
+      ));
       Navigator.pop(context);
     });
   }

@@ -94,7 +94,7 @@ class _HomeState extends State<Home> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               Container(
                 height: 40,
                 child: ListView.separated(
@@ -121,7 +121,7 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-              SizedBox(height: 15),
+              SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.only(left: 10, bottom: 5),
                 child: Text(
