@@ -16,7 +16,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController _searchController = TextEditingController();
-  List<Photo> photos = List();
+  List<Photo> photos = [];
   int page = 1;
   bool isLoading = false;
   String query;

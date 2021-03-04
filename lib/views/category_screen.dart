@@ -15,7 +15,7 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-  List<Photo> photos = List();
+  List<Photo> photos = [];
   int page = 1;
 
   bool isLoading = false;
@@ -60,7 +60,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
               child: Text(
                 widget.categoryName + ' photos',
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Color(0xff3a3b3c),
                 ),

@@ -16,8 +16,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<Category> categories = List();
-  List<Photo> photos = List();
+  List<Category> categories = [];
+  List<Photo> photos = [];
   int page = 1;
   bool isLoading = false;
 

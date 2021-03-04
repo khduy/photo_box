@@ -46,7 +46,7 @@ Widget staggeredPhotoGrid(List<Photo> photos, context) {
     padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
     //shrinkWrap: true,
     physics: BouncingScrollPhysics(),
-    crossAxisCount: 4,
+    crossAxisCount: 2,
     itemCount: photos.length,
     itemBuilder: (context, index) {
       return Container(
@@ -64,10 +64,17 @@ Widget staggeredPhotoGrid(List<Photo> photos, context) {
             FocusScope.of(context).unfocus();
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => DetailScreen(
+              PageRouteBuilder(
+                transitionDuration: Duration(milliseconds: 400),
+                reverseTransitionDuration: Duration(milliseconds: 400),
+                pageBuilder: (context, animation, secondAnimation) => DetailScreen(
                   photo: photos[index],
                   indexPhoto: index,
+                ),
+                transitionsBuilder: (context, animation, secondAnimation, Widget widget) =>
+                    FadeTransition(
+                  opacity: animation,
+                  child: widget,
                 ),
               ),
             );
@@ -75,9 +82,9 @@ Widget staggeredPhotoGrid(List<Photo> photos, context) {
         ),
       );
     },
-    staggeredTileBuilder: (index) => new StaggeredTile.fit(2),
-    mainAxisSpacing: 8,
-    crossAxisSpacing: 8,
+    staggeredTileBuilder: (index) => new StaggeredTile.fit(1),
+    mainAxisSpacing: 5,
+    crossAxisSpacing: 5,
   );
 }
 

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:photo_box/model/photo.dart';
@@ -82,15 +83,16 @@ class _DetailScreenState extends State<DetailScreen> {
                     },
                   ),
                   SizedBox(height: 5),
-                  InkWell(
-                    onTap: () => Navigator.pop(context),
+                  CupertinoButton(
                     child: Text(
                       'Cancel',
                       style: TextStyle(
+                          fontSize: 15,
                           decoration: TextDecoration.underline,
                           color: Colors.white70,
                           fontWeight: FontWeight.w500),
                     ),
+                    onPressed: () => Navigator.pop(context),
                   ),
                   SizedBox(
                     height: 50,
@@ -127,7 +129,7 @@ class _DetailScreenState extends State<DetailScreen> {
       barrierDismissible: false,
     );
     await GallerySaver.saveImage(widget.photo.scr.original).then((bool success) {
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Saved')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Saved')));
       Navigator.pop(context);
     });
   }
