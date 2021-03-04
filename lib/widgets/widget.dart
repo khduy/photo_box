@@ -18,13 +18,20 @@ class CategoryTile extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: Container(
-              color: Colors.grey,
               child: Image.network(
                 imgUrl,
-                width: 100,
-                height: 50,
+                width: 90,
+                height: 40,
                 fit: BoxFit.cover,
               ),
+            ),
+          ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(5),
+            child: Container(
+              color: Colors.black12,
+              width: 90,
+              height: 40,
             ),
           ),
           Text(

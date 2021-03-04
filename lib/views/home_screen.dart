@@ -96,7 +96,7 @@ class _HomeState extends State<Home> {
               ),
               SizedBox(height: 20),
               Container(
-                height: 50,
+                height: 40,
                 child: ListView.separated(
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   scrollDirection: Axis.horizontal,

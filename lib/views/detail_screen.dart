@@ -21,7 +21,7 @@ class _DetailScreenState extends State<DetailScreen> {
     return Scaffold(
       body: Builder(
         builder: (context) => Stack(
-          alignment: AlignmentDirectional.topEnd,
+          alignment: AlignmentDirectional.topStart,
           children: [
             Container(
               height: MediaQuery.of(context).size.height,
@@ -37,7 +37,7 @@ class _DetailScreenState extends State<DetailScreen> {
             ),
             SafeArea(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 5, right: 3),
+                padding: const EdgeInsets.only(top: 3, left: 3),
                 child: Text(
                   widget.photo.photographer,
                   style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold),
@@ -92,7 +92,9 @@ class _DetailScreenState extends State<DetailScreen> {
                           color: Colors.white70,
                           fontWeight: FontWeight.w500),
                     ),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
                   SizedBox(
                     height: 50,
@@ -129,7 +131,7 @@ class _DetailScreenState extends State<DetailScreen> {
       barrierDismissible: false,
     );
     await GallerySaver.saveImage(widget.photo.scr.original).then((bool success) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Saved')));
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Saved')));
       Navigator.pop(context);
     });
   }
