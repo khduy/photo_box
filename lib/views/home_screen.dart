@@ -144,6 +144,7 @@ class _HomeState extends State<Home> {
                       getTrendingPhoto();
                     });
                   }
+                  return isLoading;
                 },
                 child: Expanded(
                   child: staggeredPhotoGrid(photos, context),
