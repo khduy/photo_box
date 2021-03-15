@@ -118,8 +118,8 @@ class _DetailScreenState extends State<DetailScreen> {
             SafeArea(
               bottom: false,
               minimum: EdgeInsets.all(5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Stack(
+                alignment: Alignment.centerLeft,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 10),
@@ -129,24 +129,28 @@ class _DetailScreenState extends State<DetailScreen> {
                           TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Spacer(),
-                  CupertinoButton(
-                    padding: EdgeInsets.only(),
-                    child: Icon(
-                      Icons.download_sharp,
-                      color: Colors.white,
-                      size: 30,
-                    ),
-                    onPressed: () => _saveNetworkImage(context),
-                  ),
-                  CupertinoButton(
-                    padding: EdgeInsets.only(),
-                    child: Icon(
-                      Icons.close,
-                      color: Colors.white,
-                      size: 30,
-                    ),
-                    onPressed: () => Navigator.pop(context),
+                  Row(
+                    children: [
+                      Spacer(),
+                      CupertinoButton(
+                        padding: EdgeInsets.only(),
+                        child: Icon(
+                          Icons.download_sharp,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                        onPressed: () => _saveNetworkImage(context),
+                      ),
+                      CupertinoButton(
+                        padding: EdgeInsets.only(),
+                        child: Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
                   ),
                 ],
               ),
