@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:photo_box/config/config.dart';
-
 class SearchBox extends StatelessWidget {
   final TextEditingController controller;
   final Color fillColor;

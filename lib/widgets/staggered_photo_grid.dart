@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get/get.dart';
 import '../models/photo.dart';
 import '../views/detail_screen/detail_screen.dart';
 
@@ -34,11 +35,9 @@ class StaggeredPhotoGrid extends StatelessWidget {
             ),
             onTap: () {
               FocusScope.of(context).unfocus();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetailScreen(photo: photos[index], indexPhoto: index),
-                ),
+              Get.to(
+                () => DetailScreen(photo: photos[index], indexPhoto: index),
+                transition: Transition.fadeIn,
               );
             },
           ),

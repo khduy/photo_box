@@ -36,7 +36,10 @@ class Home extends StatelessWidget {
                 onSearch: (_) {
                   controller.searchController.text = controller.searchController.text.trim();
                   if (controller.searchController.text.isNotEmpty) {
-                    Get.to(() => SearchScreen(keyWord: controller.searchController.text));
+                    Get.to(
+                      () => SearchScreen(keyWord: controller.searchController.text),
+                      transition: Transition.fadeIn,
+                    );
                     FocusScope.of(context).unfocus();
                   }
                 },
@@ -56,6 +59,7 @@ class Home extends StatelessWidget {
                             () => CategoryScreen(
                               categoryName: controller.categories[index].categoryName,
                             ),
+                            transition: Transition.fadeIn,
                           );
                           FocusScope.of(context).unfocus();
                         },

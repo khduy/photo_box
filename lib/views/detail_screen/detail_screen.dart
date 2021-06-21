@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 import 'package:photo_box/models/photo.dart';
 
 import 'package:gallery_saver/gallery_saver.dart';
@@ -20,8 +25,8 @@ class DetailScreen extends StatelessWidget {
             alignment: AlignmentDirectional.bottomStart,
             children: [
               Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
+                height: Get.height,
+                width: Get.width,
                 color: Colors.transparent,
                 child: Hero(
                   transitionOnUserGestures: true,
@@ -34,7 +39,6 @@ class DetailScreen extends StatelessWidget {
               ),
               Container(
                 height: 100,
-                //color: Colors.black26,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                       begin: Alignment.bottomCenter,
@@ -46,8 +50,6 @@ class DetailScreen extends StatelessWidget {
                 ),
               ),
               SafeArea(
-                bottom: false,
-                minimum: EdgeInsets.all(5),
                 child: Stack(
                   alignment: Alignment.centerLeft,
                   children: [
@@ -56,7 +58,10 @@ class DetailScreen extends StatelessWidget {
                       child: Text(
                         photo.photographer,
                         style: TextStyle(
-                            color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     Row(
@@ -69,7 +74,9 @@ class DetailScreen extends StatelessWidget {
                             color: Colors.white,
                             size: 30,
                           ),
-                          onPressed: () => _saveNetworkImage(context),
+                          onPressed: () async {
+                            await checkPermission(context);
+                          },
                         ),
                         CupertinoButton(
                           padding: EdgeInsets.only(),
@@ -78,7 +85,7 @@ class DetailScreen extends StatelessWidget {
                             color: Colors.white,
                             size: 30,
                           ),
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () => Get.back(),
                         ),
                       ],
                     ),
@@ -90,6 +97,32 @@ class DetailScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future<void> checkPermission(context) async {
+    var status;
+    if (Platform.isIOS) {
+      status = await Permission.photos.request();
+    }
+    if (Platform.isAndroid) {
+      status = await Permission.storage.request();
+    }
+    //print(status);
+    switch (status) {
+      case PermissionStatus.granted:
+        await _saveNetworkImage(context);
+        break;
+      case PermissionStatus.permanentlyDenied:
+        openAppSettings();
+        break;
+      default:
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Need permission to save photo'),
+            duration: Duration(seconds: 1),
+          ),
+        );
+    }
   }
 
   Future<void> _saveNetworkImage(context) async {
@@ -115,13 +148,15 @@ class DetailScreen extends StatelessWidget {
       barrierDismissible: false,
     );
     await GallerySaver.saveImage(photo.scr.original).then((success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Saved'),
-          duration: Duration(seconds: 1),
-        ),
-      );
-      Navigator.pop(context);
+      if (success!) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Saved'),
+            duration: Duration(seconds: 1),
+          ),
+        );
+      }
+      Get.back();
     });
   }
 }
