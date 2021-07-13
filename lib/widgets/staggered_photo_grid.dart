@@ -37,7 +37,7 @@ class StaggeredPhotoGrid extends StatelessWidget {
               FocusScope.of(context).unfocus();
               Get.to(
                 () => DetailScreen(photo: photos[index], indexPhoto: index),
-                transition: Transition.fadeIn,
+                //transition: Transition.fadeIn,
               );
             },
           ),

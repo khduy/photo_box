@@ -10,6 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_box/models/photo.dart';
 
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:photo_view/photo_view.dart';
 
 class DetailScreen extends StatelessWidget {
   final Photo photo;
@@ -22,21 +23,34 @@ class DetailScreen extends StatelessWidget {
       body: Builder(
         builder: (context) {
           return Stack(
-            alignment: AlignmentDirectional.bottomStart,
+            alignment: AlignmentDirectional.bottomCenter,
             children: [
-              Container(
-                height: Get.height,
-                width: Get.width,
-                color: Colors.transparent,
-                child: Hero(
-                  transitionOnUserGestures: true,
-                  tag: indexPhoto,
-                  child: CachedNetworkImage(
-                    imageUrl: photo.scr.large,
-                    fit: BoxFit.fitWidth,
-                  ),
+              PhotoView(
+                imageProvider: CachedNetworkImageProvider(
+                  photo.scr.large,
                 ),
+                heroAttributes: PhotoViewHeroAttributes(
+                  tag: indexPhoto,
+                  transitionOnUserGestures: true,
+                ),
+                minScale: PhotoViewComputedScale.contained,
               ),
+              // Container(
+              //   height: Get.height,
+              //   width: Get.width,
+              //   child: Hero(
+              //     transitionOnUserGestures: true,
+              //     tag: indexPhoto,
+              //     child: InteractiveViewer(
+              //       minScale: 1,
+              //       maxScale: 4,
+              //       child: CachedNetworkImage(
+              //         imageUrl: photo.scr.large,
+              //         fit: BoxFit.fitWidth,
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Container(
                 height: 100,
                 decoration: BoxDecoration(
@@ -50,6 +64,7 @@ class DetailScreen extends StatelessWidget {
                 ),
               ),
               SafeArea(
+                //use Stack for the case where the photographer's name is too long
                 child: Stack(
                   alignment: Alignment.centerLeft,
                   children: [
