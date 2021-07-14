@@ -51,6 +51,7 @@ class DetailScreen extends StatelessWidget {
               //     ),
               //   ),
               // ),
+              // text can be see if the photo is white
               Container(
                 height: 100,
                 decoration: BoxDecoration(
@@ -64,7 +65,7 @@ class DetailScreen extends StatelessWidget {
                 ),
               ),
               SafeArea(
-                //use Stack for the case where the photographer's name is too long
+                // use Stack for the case where the photographer's name is too long
                 child: Stack(
                   alignment: Alignment.centerLeft,
                   children: [
@@ -122,7 +123,7 @@ class DetailScreen extends StatelessWidget {
     if (Platform.isAndroid) {
       status = await Permission.storage.request();
     }
-    //print(status);
+    
     switch (status) {
       case PermissionStatus.granted:
         await _saveNetworkImage(context);
