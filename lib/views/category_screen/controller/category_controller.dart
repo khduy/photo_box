@@ -1,8 +1,9 @@
 import 'dart:developer';
 
 import 'package:get/get.dart';
-import 'package:photo_box/models/photo.dart';
-import 'package:photo_box/provider/photo_provider.dart';
+
+import '../../../models/photo.dart';
+import '../../../provider/photo_provider.dart';
 
 class CategoryController extends GetxController {
   final _photoProvider = PhotoProvider();
@@ -20,11 +21,11 @@ class CategoryController extends GetxController {
     await getPhotos();
   }
 
-  Future<void> getPhotos({int perPage = 16}) async {
+  Future<void> getPhotos({int perPage = 20}) async {
     if (!isLoading) {
       isLoading = true;
       currentPage++;
-      log("current page: $currentPage");
+      log("page: $currentPage");
 
       var temp = await _photoProvider.searchPhotos(
         keyWord: categoryName,

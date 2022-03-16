@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:photo_box/config/config.dart';
-import 'package:photo_box/models/photo.dart';
-import 'package:photo_box/provider/photo_provider.dart';
+import '../../../config/config.dart';
+import '../../../models/photo.dart';
+import '../../../provider/photo_provider.dart';
 
 class HomeController extends GetxController {
   final _photoProvider = PhotoProvider();
@@ -21,11 +21,13 @@ class HomeController extends GetxController {
     await getCuratedPhotos();
   }
 
-  Future<void> getCuratedPhotos({int perPage = 16}) async {
+  Future<void> getCuratedPhotos({int perPage = 20}) async {
     if (!isLoading) {
       isLoading = true;
+      update();
+
       currentPage++;
-      log("current page: $currentPage");
+      log("page: $currentPage");
 
       var temp = await _photoProvider.getCuratedPhotos(page: currentPage, perPage: perPage);
       photos.addAll(temp);

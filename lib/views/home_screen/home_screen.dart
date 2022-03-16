@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:photo_box/config/config.dart';
-import 'package:photo_box/views/home_screen/controller/home_controller.dart';
+import '../../config/config.dart';
+import 'controller/home_controller.dart';
 
 import '../category_screen/category_screen.dart';
 import '../search_screen/search_screen.dart';
@@ -14,18 +13,15 @@ import '../../widgets/staggered_photo_grid.dart';
 class Home extends StatelessWidget {
   final controller = Get.put(HomeController());
 
+  Home({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: Config.backgroundColor,
-        appBar: AppBar(
-          title: AppBarTilte(),
-          centerTitle: true,
-          elevation: 0.0,
-          backgroundColor: Config.backgroundColor,
-        ),
+        appBar: const CustomAppBar(),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
@@ -38,20 +34,19 @@ class Home extends StatelessWidget {
                   if (controller.searchController.text.isNotEmpty) {
                     Get.to(
                       () => SearchScreen(keyWord: controller.searchController.text),
-                      //transition: Transition.fadeIn,
                     );
                     FocusScope.of(context).unfocus();
                   }
                 },
               ),
-              SizedBox(height: 10),
-              Container(
+              const SizedBox(height: 10),
+              SizedBox(
                 height: 40,
                 child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     itemCount: controller.categories.length,
-                    separatorBuilder: (context, index) => SizedBox(width: 6),
+                    separatorBuilder: (context, index) => const SizedBox(width: 6),
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
@@ -70,8 +65,8 @@ class Home extends StatelessWidget {
                       );
                     }),
               ),
-              SizedBox(height: 20),
-              Text(
+              const SizedBox(height: 20),
+              const Text(
                 'Trending',
                 style: TextStyle(
                   fontSize: 20,
@@ -79,19 +74,16 @@ class Home extends StatelessWidget {
                   color: Config.headerTilteColor,
                 ),
               ),
-              SizedBox(height: 10),
-              NotificationListener<ScrollNotification>(
-                onNotification: (ScrollNotification scrollInfo) {
-                  if (scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent) {
-                    controller.getCuratedPhotos();
-                  }
-                  return true;
-                },
-                child: Expanded(
-                  child: GetBuilder<HomeController>(
-                    builder: (controller) => StaggeredPhotoGrid(controller.photos),
-                  ),
-                ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: GetBuilder<HomeController>(builder: (controller) {
+                  return StaggeredPhotoGrid(
+                    photos: controller.photos,
+                    onReachedMax: () {
+                      controller.getCuratedPhotos();
+                    },
+                  );
+                }),
               ),
             ],
           ),

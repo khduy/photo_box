@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class CategoryItem extends StatelessWidget {
   final String imgUrl;
   final String title;
-  CategoryItem({required this.imgUrl, required this.title});
+  const CategoryItem({Key? key, required this.imgUrl, required this.title}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -12,13 +12,11 @@ class CategoryItem extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(5),
-          child: Container(
-            child: CachedNetworkImage(
-              imageUrl: imgUrl,
-              width: 100,
-              height: 40,
-              fit: BoxFit.cover,
-            ),
+          child: CachedNetworkImage(
+            imageUrl: imgUrl,
+            width: 100,
+            height: 40,
+            fit: BoxFit.cover,
           ),
         ),
         ClipRRect(
@@ -31,7 +29,7 @@ class CategoryItem extends StatelessWidget {
         ),
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
             fontSize: 14,

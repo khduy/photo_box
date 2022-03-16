@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:photo_box/models/category.dart';
+import '../models/category.dart';
 
 class Config {
-  static final String apiKey = '563492ad6f91700001000001fc80e67b4d9b4ec6bb422a7307f2f1a2';
+  static const String apiKey = '563492ad6f91700001000001fc80e67b4d9b4ec6bb422a7307f2f1a2';
 
   static final List<Category> categories = [
     Category(
@@ -57,9 +57,7 @@ class Config {
     ),
   ];
 
-  static final backgroundColor = Color(0xFFF6F6F6);
+  static const backgroundColor = Color(0xFFF6F6F6);
 
-  static final headerTilteColor = Color(0xFF0E0B0D);
-
-  //static final textColor = Color(0xFF747485);
+  static const headerTilteColor = Color(0xFF0E0B0D);
 }

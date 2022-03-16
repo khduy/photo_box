@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:photo_box/config/config.dart';
-import 'package:photo_box/models/photo.dart';
+import '../config/config.dart';
+import '../models/photo.dart';
 import 'package:http/http.dart' as http;
 
 class PhotoProvider {

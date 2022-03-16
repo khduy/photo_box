@@ -2,20 +2,22 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import 'package:photo_box/models/photo.dart';
-
-import 'package:gallery_saver/gallery_saver.dart';
 import 'package:photo_view/photo_view.dart';
+
+import '../../models/photo.dart';
 
 class DetailScreen extends StatelessWidget {
   final Photo photo;
   final int indexPhoto;
-  DetailScreen({required this.photo, required this.indexPhoto});
+  const DetailScreen({
+    Key? key,
+    required this.photo,
+    required this.indexPhoto,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +56,7 @@ class DetailScreen extends StatelessWidget {
               // text can be see if the photo is white
               Container(
                 height: 100,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   gradient: LinearGradient(
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
@@ -73,7 +75,7 @@ class DetailScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 10),
                       child: Text(
                         photo.photographer,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -82,10 +84,10 @@ class DetailScreen extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Spacer(),
+                        const Spacer(),
                         CupertinoButton(
-                          padding: EdgeInsets.only(),
-                          child: Icon(
+                          padding: const EdgeInsets.only(),
+                          child: const Icon(
                             Icons.download_sharp,
                             color: Colors.white,
                             size: 30,
@@ -95,8 +97,8 @@ class DetailScreen extends StatelessWidget {
                           },
                         ),
                         CupertinoButton(
-                          padding: EdgeInsets.only(),
-                          child: Icon(
+                          padding: const EdgeInsets.only(),
+                          child: const Icon(
                             Icons.close,
                             color: Colors.white,
                             size: 30,
@@ -123,7 +125,7 @@ class DetailScreen extends StatelessWidget {
     if (Platform.isAndroid) {
       status = await Permission.storage.request();
     }
-    
+
     switch (status) {
       case PermissionStatus.granted:
         await _saveNetworkImage(context);
@@ -133,7 +135,7 @@ class DetailScreen extends StatelessWidget {
         break;
       default:
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Need permission to save photo'),
             duration: Duration(seconds: 1),
           ),
@@ -145,7 +147,7 @@ class DetailScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (_) => Dialog(
-        child: Container(
+        child: SizedBox(
           height: 60,
           width: 100,
           child: Row(
@@ -153,10 +155,10 @@ class DetailScreen extends StatelessWidget {
               Container(
                 height: 50,
                 width: 50,
-                padding: EdgeInsets.all(5),
-                child: CircularProgressIndicator(),
+                padding: const EdgeInsets.all(5),
+                child: const CircularProgressIndicator(),
               ),
-              Text('Saving...'),
+              const Text('Saving...'),
             ],
           ),
         ),
@@ -166,7 +168,7 @@ class DetailScreen extends StatelessWidget {
     await GallerySaver.saveImage(photo.scr.original).then((success) {
       if (success!) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Saved'),
             duration: Duration(seconds: 1),
           ),

@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:photo_box/models/photo.dart';
-import 'package:photo_box/provider/photo_provider.dart';
+import '../../../models/photo.dart';
+import '../../../provider/photo_provider.dart';
 
 class SearchController extends GetxController {
   final _photoProvider = PhotoProvider();
@@ -23,7 +23,7 @@ class SearchController extends GetxController {
     await searchPhotos(isNewSearch: true);
   }
 
-  Future<void> searchPhotos({int perPage = 16, bool isNewSearch = false}) async {
+  Future<void> searchPhotos({int perPage = 20, bool isNewSearch = false}) async {
     if (!isLoading && searchController.text.trim().isNotEmpty) {
       isLoading = true;
 
@@ -33,7 +33,7 @@ class SearchController extends GetxController {
       } else {
         currentPage++;
       }
-      log("current page: $currentPage");
+      log("page: $currentPage");
 
       var temp = await _photoProvider.searchPhotos(
         keyWord: searchController.text,
