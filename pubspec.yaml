@@ -30,8 +30,10 @@ dependencies:
   get: ^4.6.1
   permission_handler: ^9.2.0
   cupertino_icons: ^1.0.4
-  dismissible_page: ^0.7.0
+  universal_html: ^2.0.8
   
+  
+
 dependency_overrides:
   photo_view:
     git:

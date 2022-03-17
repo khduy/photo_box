@@ -20,6 +20,7 @@ class Home extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        
         backgroundColor: Config.backgroundColor,
         appBar: const CustomAppBar(),
         body: Padding(
@@ -43,26 +44,27 @@ class Home extends StatelessWidget {
               SizedBox(
                 height: 40,
                 child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount: controller.categories.length,
-                    separatorBuilder: (context, index) => const SizedBox(width: 6),
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Get.to(
-                            () => CategoryScreen(
-                              categoryName: controller.categories[index].categoryName,
-                            ),
-                          );
-                          FocusScope.of(context).unfocus();
-                        },
-                        child: CategoryItem(
-                          imgUrl: controller.categories[index].imgUrl,
-                          title: controller.categories[index].categoryName,
-                        ),
-                      );
-                    }),
+                  scrollDirection: Axis.horizontal,
+                  // shrinkWrap: true,
+                  itemCount: controller.categories.length,
+                  separatorBuilder: (context, index) => const SizedBox(width: 6),
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        Get.to(
+                          () => CategoryScreen(
+                            categoryName: controller.categories[index].categoryName,
+                          ),
+                        );
+                        FocusScope.of(context).unfocus();
+                      },
+                      child: CategoryItem(
+                        imgUrl: controller.categories[index].imgUrl,
+                        title: controller.categories[index].categoryName,
+                      ),
+                    );
+                  },
+                ),
               ),
               const SizedBox(height: 20),
               const Text(

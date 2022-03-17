@@ -36,12 +36,14 @@ class Src {
   String portrait;
   String medium;
   String large;
+  String large2x;
 
   Src({
     required this.original,
     required this.portrait,
     required this.medium,
     required this.large,
+    required this.large2x,
   });
 
   factory Src.fromJson(Map<String, dynamic> json) {
@@ -50,6 +52,7 @@ class Src {
       portrait: json['portrait'],
       medium: json['medium'],
       large: json['large'],
+      large2x: json['large2x'],
     );
   }
 }

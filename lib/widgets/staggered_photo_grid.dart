@@ -39,42 +39,44 @@ class _StaggeredPhotoGridState extends State<StaggeredPhotoGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return MasonryGridView.count(
-      physics: const BouncingScrollPhysics(),
-      crossAxisCount: 2,
-      mainAxisSpacing: 5,
-      crossAxisSpacing: 5,
-      itemCount: widget.photos.length,
-      controller: _scrollController,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          child: Hero(
-            tag: widget.heroTagPrefix + index.toString(),
-            child: AspectRatio(
-              aspectRatio: widget.photos[index].width / widget.photos[index].height,
-              child: CachedNetworkImage(
-                imageUrl: widget.photos[index].scr.large,
-                placeholder: (context, url) => Container(
-                  color: Color(int.parse('0xff' + widget.photos[index].avgColor.substring(1))),
+    return OrientationBuilder(builder: (context, orientation) {
+      return MasonryGridView.count(
+        physics: const BouncingScrollPhysics(),
+        crossAxisCount: orientation == Orientation.portrait ? 2 : 3,
+        mainAxisSpacing: 5,
+        crossAxisSpacing: 5,
+        itemCount: widget.photos.length,
+        controller: _scrollController,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            child: Hero(
+              tag: widget.heroTagPrefix + index.toString(),
+              child: AspectRatio(
+                aspectRatio: widget.photos[index].width / widget.photos[index].height,
+                child: CachedNetworkImage(
+                  imageUrl: widget.photos[index].scr.large,
+                  placeholder: (context, url) => Container(
+                    color: Color(int.parse('0xff' + widget.photos[index].avgColor.substring(1))),
+                  ),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
             ),
-          ),
-          onTap: () {
-            FocusScope.of(context).unfocus();
+            onTap: () {
+              FocusScope.of(context).unfocus();
 
-            Get.to(
-              () => DetailScreen(
-                photo: widget.photos[index],
-                heroTag: widget.heroTagPrefix + index.toString(),
-              ),
-              transition: Transition.fadeIn,
-            );
-          },
-        );
-      },
-    );
+              Get.to(
+                () => DetailScreen(
+                  photo: widget.photos[index],
+                  heroTag: widget.heroTagPrefix + index.toString(),
+                ),
+                transition: Transition.fadeIn,
+              );
+            },
+          );
+        },
+      );
+    });
   }
 
   void _onScroll() {

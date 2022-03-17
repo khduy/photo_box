@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
+import 'package:universal_html/html.dart' as html;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:get/get.dart';
@@ -27,7 +30,7 @@ class DetailScreen extends StatelessWidget {
         children: [
           PhotoView(
             imageProvider: CachedNetworkImageProvider(
-              photo.scr.large,
+              photo.scr.large2x,
             ),
             heroAttributes: PhotoViewHeroAttributes(
               tag: heroTag,
@@ -39,53 +42,39 @@ class DetailScreen extends StatelessWidget {
           Container(
             height: 100,
             decoration: const BoxDecoration(
-              gradient:
-                  LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [
-                Colors.black26,
-                Colors.transparent,
-              ]),
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [
+                  Colors.black26,
+                  Colors.transparent,
+                ],
+              ),
             ),
           ),
           SafeArea(
-            // use Stack for the case where the photographer's name is too long
-            child: Stack(
-              alignment: Alignment.centerLeft,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Text(
-                    photo.photographer,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
+                CupertinoButton(
+                  padding: const EdgeInsets.only(),
+                  child: const Icon(
+                    Icons.download_sharp,
+                    color: Colors.white,
+                    size: 30,
                   ),
+                  onPressed: () {
+                    checkPermission(context);
+                  },
                 ),
-                Row(
-                  children: [
-                    const Spacer(),
-                    CupertinoButton(
-                      padding: const EdgeInsets.only(),
-                      child: const Icon(
-                        Icons.download_sharp,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                      onPressed: () async {
-                        await checkPermission(context);
-                      },
-                    ),
-                    CupertinoButton(
-                      padding: const EdgeInsets.only(),
-                      child: const Icon(
-                        Icons.close,
-                        color: Colors.white,
-                        size: 30,
-                      ),
-                      onPressed: () => Get.back(),
-                    ),
-                  ],
+                CupertinoButton(
+                  padding: const EdgeInsets.only(),
+                  child: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  onPressed: () => Get.back(),
                 ),
               ],
             ),
@@ -96,17 +85,28 @@ class DetailScreen extends StatelessWidget {
   }
 
   Future<void> checkPermission(context) async {
+    if (kIsWeb) {
+      showSavingDialog(context);
+      await downloadImage(photo.scr.original);
+      Get.back();
+      return;
+    }
+
     var status;
     if (Platform.isIOS) {
       status = await Permission.photos.request();
     }
     if (Platform.isAndroid) {
       status = await Permission.storage.request();
+    } else {
+      return;
     }
 
     switch (status) {
       case PermissionStatus.granted:
+        showSavingDialog(context);
         await _saveNetworkImage(context);
+        Get.back();
         break;
       case PermissionStatus.permanentlyDenied:
         openAppSettings();
@@ -122,6 +122,49 @@ class DetailScreen extends StatelessWidget {
   }
 
   Future<void> _saveNetworkImage(context) async {
+    await GallerySaver.saveImage(photo.scr.original).then((success) {
+      if (success!) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Saved'),
+            duration: Duration(seconds: 1),
+          ),
+        );
+      }
+      Get.back();
+    });
+  }
+
+  Future<void> downloadImage(String imageUrl) async {
+    try {
+      // first we make a request to the url like you did
+      // in the android and ios version
+      final http.Response r = await http.get(
+        Uri.parse(imageUrl),
+      );
+
+      // we get the bytes from the body
+      final data = r.bodyBytes;
+      // and encode them to base64
+      final base64data = base64Encode(data);
+
+      // then we create and AnchorElement with the html package
+      final a = html.AnchorElement(href: 'data:image/jpeg;base64,$base64data');
+
+      // set the name of the file we want the image to get
+      // downloaded to
+      a.download = 'photo.jpg';
+
+      // and we click the AnchorElement which downloads the image
+      a.click();
+      // finally we remove the AnchorElement
+      a.remove();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void showSavingDialog(context) {
     showDialog(
       context: context,
       builder: (_) => Dialog(
@@ -143,16 +186,5 @@ class DetailScreen extends StatelessWidget {
       ),
       barrierDismissible: false,
     );
-    await GallerySaver.saveImage(photo.scr.original).then((success) {
-      if (success!) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Saved'),
-            duration: Duration(seconds: 1),
-          ),
-        );
-      }
-      Get.back();
-    });
   }
 }
