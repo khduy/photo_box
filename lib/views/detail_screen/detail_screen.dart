@@ -12,107 +12,85 @@ import '../../models/photo.dart';
 
 class DetailScreen extends StatelessWidget {
   final Photo photo;
-  final int indexPhoto;
+  final String heroTag;
   const DetailScreen({
     Key? key,
     required this.photo,
-    required this.indexPhoto,
+    required this.heroTag,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Builder(
-        builder: (context) {
-          return Stack(
-            alignment: AlignmentDirectional.bottomCenter,
-            children: [
-              PhotoView(
-                imageProvider: CachedNetworkImageProvider(
-                  photo.scr.large,
-                ),
-                heroAttributes: PhotoViewHeroAttributes(
-                  tag: indexPhoto,
-                  transitionOnUserGestures: true,
-                ),
-                minScale: PhotoViewComputedScale.contained,
-              ),
-              // Container(
-              //   height: Get.height,
-              //   width: Get.width,
-              //   child: Hero(
-              //     transitionOnUserGestures: true,
-              //     tag: indexPhoto,
-              //     child: InteractiveViewer(
-              //       minScale: 1,
-              //       maxScale: 4,
-              //       child: CachedNetworkImage(
-              //         imageUrl: photo.scr.large,
-              //         fit: BoxFit.fitWidth,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // text can be see if the photo is white
-              Container(
-                height: 100,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                        Colors.black26,
-                        Colors.transparent,
-                      ]),
-                ),
-              ),
-              SafeArea(
-                // use Stack for the case where the photographer's name is too long
-                child: Stack(
-                  alignment: Alignment.centerLeft,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Text(
-                        photo.photographer,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+      body: Stack(
+        alignment: AlignmentDirectional.bottomCenter,
+        children: [
+          PhotoView(
+            imageProvider: CachedNetworkImageProvider(
+              photo.scr.large,
+            ),
+            heroAttributes: PhotoViewHeroAttributes(
+              tag: heroTag,
+              transitionOnUserGestures: true,
+            ),
+            minScale: PhotoViewComputedScale.contained,
+          ),
+          // text can be see if the photo is white
+          Container(
+            height: 100,
+            decoration: const BoxDecoration(
+              gradient:
+                  LinearGradient(begin: Alignment.bottomCenter, end: Alignment.topCenter, colors: [
+                Colors.black26,
+                Colors.transparent,
+              ]),
+            ),
+          ),
+          SafeArea(
+            // use Stack for the case where the photographer's name is too long
+            child: Stack(
+              alignment: Alignment.centerLeft,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(
+                    photo.photographer,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Row(
-                      children: [
-                        const Spacer(),
-                        CupertinoButton(
-                          padding: const EdgeInsets.only(),
-                          child: const Icon(
-                            Icons.download_sharp,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                          onPressed: () async {
-                            await checkPermission(context);
-                          },
-                        ),
-                        CupertinoButton(
-                          padding: const EdgeInsets.only(),
-                          child: const Icon(
-                            Icons.close,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                          onPressed: () => Get.back(),
-                        ),
-                      ],
+                  ),
+                ),
+                Row(
+                  children: [
+                    const Spacer(),
+                    CupertinoButton(
+                      padding: const EdgeInsets.only(),
+                      child: const Icon(
+                        Icons.download_sharp,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                      onPressed: () async {
+                        await checkPermission(context);
+                      },
+                    ),
+                    CupertinoButton(
+                      padding: const EdgeInsets.only(),
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                      onPressed: () => Get.back(),
                     ),
                   ],
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

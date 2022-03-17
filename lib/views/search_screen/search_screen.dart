@@ -36,6 +36,7 @@ class SearchScreen extends StatelessWidget {
                 child: GetBuilder<SearchController>(
                   builder: (controller) => StaggeredPhotoGrid(
                     photos: controller.photos,
+                    heroTagPrefix: 'search_',
                     onReachedMax: () {
                       controller.searchPhotos(isNewSearch: false);
                     },

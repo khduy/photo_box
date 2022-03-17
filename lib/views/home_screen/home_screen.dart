@@ -29,7 +29,7 @@ class Home extends StatelessWidget {
             children: [
               SearchBox(
                 controller: controller.searchController,
-                onSearch: (_) {
+                onSearch: (value) {
                   controller.searchController.text = controller.searchController.text.trim();
                   if (controller.searchController.text.isNotEmpty) {
                     Get.to(
@@ -54,7 +54,6 @@ class Home extends StatelessWidget {
                             () => CategoryScreen(
                               categoryName: controller.categories[index].categoryName,
                             ),
-                            //transition: Transition.fadeIn,
                           );
                           FocusScope.of(context).unfocus();
                         },
@@ -79,6 +78,7 @@ class Home extends StatelessWidget {
                 child: GetBuilder<HomeController>(builder: (controller) {
                   return StaggeredPhotoGrid(
                     photos: controller.photos,
+                    heroTagPrefix: 'home_',
                     onReachedMax: () {
                       controller.getCuratedPhotos();
                     },

@@ -9,10 +9,13 @@ import '../views/detail_screen/detail_screen.dart';
 class StaggeredPhotoGrid extends StatefulWidget {
   final List<Photo> photos;
   final VoidCallback onReachedMax;
+  final String heroTagPrefix;
+
   const StaggeredPhotoGrid({
     Key? key,
     required this.photos,
     required this.onReachedMax,
+    required this.heroTagPrefix,
   }) : super(key: key);
 
   @override
@@ -46,7 +49,7 @@ class _StaggeredPhotoGridState extends State<StaggeredPhotoGrid> {
       itemBuilder: (context, index) {
         return GestureDetector(
           child: Hero(
-            tag: index,
+            tag: widget.heroTagPrefix + index.toString(),
             child: AspectRatio(
               aspectRatio: widget.photos[index].width / widget.photos[index].height,
               child: CachedNetworkImage(
@@ -60,8 +63,12 @@ class _StaggeredPhotoGridState extends State<StaggeredPhotoGrid> {
           ),
           onTap: () {
             FocusScope.of(context).unfocus();
+
             Get.to(
-              () => DetailScreen(photo: widget.photos[index], indexPhoto: index),
+              () => DetailScreen(
+                photo: widget.photos[index],
+                heroTag: widget.heroTagPrefix + index.toString(),
+              ),
               transition: Transition.fadeIn,
             );
           },

@@ -37,6 +37,7 @@ class CategoryScreen extends StatelessWidget {
               child: GetBuilder<CategoryController>(builder: (controller) {
                 return StaggeredPhotoGrid(
                   photos: controller.photos,
+                  heroTagPrefix: 'category_',
                   onReachedMax: () {
                     controller.getPhotos();
                   },
